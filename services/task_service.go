@@ -7,6 +7,7 @@ import (
 
 type ITaskService interface {
 	FindAll() (*[]models.Task, error)
+	FindById(id uint) (*models.Task, error)
 }
 
 type TaskService struct {
@@ -19,4 +20,8 @@ func NewTaskService(taskRepository repositories.ITaskRepository) ITaskService {
 
 func (s *TaskService) FindAll() (*[]models.Task, error) {
 	return s.taskRepository.FindAll()
+}
+
+func (s *TaskService) FindById(id uint) (*models.Task, error) {
+	return s.taskRepository.FindById(id)
 }

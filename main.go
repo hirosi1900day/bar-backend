@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bar-backend/controllers"
 	"bar-backend/models"
 	"bar-backend/repositories"
 	"bar-backend/services"
@@ -16,7 +17,7 @@ func main() {
 	}
 	task_repository := repositories.NewTaskMemoryRepository(tasks)
 	task_service := services.NewTaskService(task_repository)
-	task_controller := NewTaskController(task_service)
+	task_controller := controllers.NewTaskController(task_service)
 
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) {
@@ -25,5 +26,6 @@ func main() {
 		})
 	})
 	r.GET("/tasks", task_controller.FindAll)
+	r.GET("/tasks/:id", task_controller.FindById)
 	r.Run() // 0.0.0.0:8080 でサーバーを立てます。
 }
