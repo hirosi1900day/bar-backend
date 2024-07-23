@@ -11,9 +11,9 @@ import (
 
 func main() {
 	tasks := []models.Task{
-		{ID: 1, Title: "title1", Status: "status1", Description: "description", DueDate: "2021-01-01"},
-		{ID: 2, Title: "title2", Status: "status2", Description: "description", DueDate: "2021-01-02"},
-		{ID: 3, Title: "title3", Status: "status3", Description: "description", DueDate: "2021-01-03"},
+		{ID: 1, Title: "title1", Status: models.Done, Description: "description", DueDate: "2021-01-01"},
+		{ID: 2, Title: "title2", Status: models.InProgress, Description: "description", DueDate: "2021-01-02"},
+		{ID: 3, Title: "title3", Status: models.Todo, Description: "description", DueDate: "2021-01-03"},
 	}
 	task_repository := repositories.NewTaskMemoryRepository(tasks)
 	task_service := services.NewTaskService(task_repository)
@@ -27,5 +27,6 @@ func main() {
 	})
 	r.GET("/tasks", task_controller.FindAll)
 	r.GET("/tasks/:id", task_controller.FindById)
+	r.POST("/tasks", task_controller.Create)
 	r.Run() // 0.0.0.0:8080 でサーバーを立てます。
 }

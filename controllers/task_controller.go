@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"bar-backend/dto"
 	"bar-backend/services"
 	"net/http"
 	"strconv"
@@ -11,6 +12,7 @@ import (
 type ITaskController interface {
 	FindAll(c *gin.Context)
 	FindById(c *gin.Context)
+	Create(c *gin.Context)
 }
 
 type TaskController struct {
@@ -49,4 +51,20 @@ func (c *TaskController) FindById(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"data": task})
+}
+
+func (c *TaskController) Create(ctx *gin.Context) {
+	var taskDto dto.TaskDto
+	if err := ctx.ShouldBindJSON(&taskDto); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	task, err := c.taskService.Create(taskDto)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, gin.H{"data": task})
 }
