@@ -30,9 +30,8 @@ func (s *TaskService) FindById(id uint) (*models.Task, error) {
 
 func (s *TaskService) Create(createTaskInput dto.TaskDto) (*models.Task, error) {
 	task := models.Task{
-		ID:          createTaskInput.ID,
 		Title:       createTaskInput.Title,
-		Status:      createTaskInput.Status,
+		Status:      models.Todo,
 		Description: createTaskInput.Description,
 		DueDate:     createTaskInput.DueDate,
 	}
