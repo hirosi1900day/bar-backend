@@ -15,5 +15,5 @@ type Task struct {
 	Title       string     `json:"title"`
 	Status      TaskStatus `json:"status"`
 	Description string     `json:"description"`
-	DueDate     string     `json:"due_date"`
+	DueDate     string     `json:"dueDate"`
 }

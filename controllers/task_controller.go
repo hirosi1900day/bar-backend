@@ -13,6 +13,7 @@ type ITaskController interface {
 	FindAll(c *gin.Context)
 	FindById(c *gin.Context)
 	Create(c *gin.Context)
+	Update(c *gin.Context)
 }
 
 type TaskController struct {
@@ -54,17 +55,38 @@ func (c *TaskController) FindById(ctx *gin.Context) {
 }
 
 func (c *TaskController) Create(ctx *gin.Context) {
-	var taskDto dto.TaskDto
-	if err := ctx.ShouldBindJSON(&taskDto); err != nil {
+	var CreateTaskDto dto.CreateTaskDto
+	if err := ctx.ShouldBindJSON(&CreateTaskDto); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	task, err := c.taskService.Create(taskDto)
+	task, err := c.taskService.Create(CreateTaskDto)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	ctx.JSON(http.StatusCreated, gin.H{"data": task})
+}
+
+func (c *TaskController) Update(ctx *gin.Context) {
+	id, err := strconv.ParseUint(ctx.Param("id"), 10, 64)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
+
+	var input = dto.UpdateTaskDto{}
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	updateItem, err := c.taskService.Update(uint(id), input)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"data": updateItem})
 }
