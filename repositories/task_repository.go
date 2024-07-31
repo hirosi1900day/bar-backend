@@ -14,6 +14,7 @@ type ITaskRepository interface {
 	FindById(id uint) (*models.Task, error)
 	Create(task models.Task) (*models.Task, error)
 	Update(task models.Task) (*models.Task, error)
+	Delete(id uint) error
 }
 
 func NewTaskMemoryRepository(tasks []models.Task) ITaskRepository {
@@ -47,4 +48,14 @@ func (r *TaskMemoryRepository) Update(task models.Task) (*models.Task, error) {
 		}
 	}
 	return nil, errors.New("record not found")
+}
+
+func (r *TaskMemoryRepository) Delete(id uint) error {
+	for i, task := range r.tasks {
+		if task.ID == id {
+			r.tasks = append(r.tasks[:i], r.tasks[i+1:]...)
+			return nil
+		}
+	}
+	return errors.New("record not found")
 }

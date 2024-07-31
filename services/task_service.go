@@ -11,6 +11,7 @@ type ITaskService interface {
 	FindById(id uint) (*models.Task, error)
 	Create(createTaskInput dto.CreateTaskDto) (*models.Task, error)
 	Update(id uint, UpdateTaskDto dto.UpdateTaskDto) (*models.Task, error)
+	Delete(id uint) error
 }
 
 type TaskService struct {
@@ -59,4 +60,8 @@ func (s *TaskService) Update(id uint, UpdateTaskDto dto.UpdateTaskDto) (*models.
 	}
 
 	return s.taskRepository.Update(*task)
+}
+
+func (s *TaskService) Delete(id uint) error {
+	return s.taskRepository.Delete(id)
 }

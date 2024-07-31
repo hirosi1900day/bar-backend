@@ -29,5 +29,6 @@ func main() {
 	r.GET("/tasks/:id", task_controller.FindById)
 	r.POST("/tasks", task_controller.Create)
 	r.PUT("/tasks/:id", task_controller.Update)
+	r.DELETE("/tasks/:id", task_controller.Delete)
 	r.Run() // 0.0.0.0:8080 でサーバーを立てます。
 }
